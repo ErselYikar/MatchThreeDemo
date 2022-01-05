@@ -5,14 +5,19 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     public GameObject left, secondLeft, right, secondRight, up, secondUp, bottom, secondBottom;
-    public bool horizontalMatch, verticalMatch;
+    private bool horizontalMatch, verticalMatch;
     private Dictionary<Vector2, GameObject> items = new Dictionary<Vector2, GameObject>();
     private GameObject[] itemsArray = new GameObject[64];
     private ItemsToPool itemsToPool;
+
+    
+
+    private MainSpawner mainSpawner;
     
 
     private void OnEnable()
     {
+        mainSpawner = FindObjectOfType<MainSpawner>();
         GameManager.OnGameStatesChanged += FindAdjacentItems;
         itemsToPool = FindObjectOfType<ItemsToPool>();
         GameManager.OnGameStatesChanged += FindMatches;
@@ -20,7 +25,7 @@ public class Item : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.OnGameStatesChanged += FindAdjacentItems;
+        GameManager.OnGameStatesChanged -= FindAdjacentItems;
         GameManager.OnGameStatesChanged -= FindMatches;
     }
 
@@ -93,7 +98,6 @@ public class Item : MonoBehaviour
                     }
                 }
             }
-
             GameManager.Instance.UpdateGameStates(GameState.MatchChecking);
         }
     }
@@ -102,57 +106,50 @@ public class Item : MonoBehaviour
     {
         if(state == GameState.MatchChecking)
         {
-            /*if ((bottom != null && up != null && secondBottom != null && secondUp != null) && 
-                (bottom.name == gameObject.name || up.name == gameObject.name))
-            {
-                if(secondBottom.name == gameObject.name)
-                {
-                    itemsToPool.ReturnItem(secondBottom);
-                }
-                if(secondUp.name == gameObject.name)
-                {
-                    itemsToPool.ReturnItem(secondUp);
-                }
-                itemsToPool.ReturnItem(bottom);
-                itemsToPool.ReturnItem(up);
-                itemsToPool.ReturnItem(gameObject);
-            }
-
-            if ((left != null && right != null && secondLeft != null && secondRight != null) &&
-               (left.name == gameObject.name || right.name == gameObject.name))
-            {
-                if (secondLeft.name == gameObject.name)
-                {
-                    itemsToPool.ReturnItem(secondLeft);
-                }
-                if (secondRight.name == gameObject.name)
-                {
-                    itemsToPool.ReturnItem(secondRight);
-                }
-                itemsToPool.ReturnItem(left);
-                itemsToPool.ReturnItem(right);
-                itemsToPool.ReturnItem(gameObject);
-            }*/
-
             if ((left != null && right != null) && (left.name == right.name) &&
             (left.name == gameObject.name || right.name == gameObject.name))
             {
-                itemsToPool.ReturnItem(left);
-                itemsToPool.ReturnItem(right);
-                itemsToPool.ReturnItem(gameObject);
+                horizontalMatch = true;
+                if (horizontalMatch == true)
+                {
+                    horizontalMatch = false;
+                    
+                    //itemsToPool.ReturnItem(left);
+                    //itemsToPool.ReturnItem(right);
+                    itemsToPool.ReturnItem(gameObject);
+                    //mainSpawner.items.Remove(left.transform.position);
+                    //mainSpawner.items.Remove(right.transform.position);
+                    mainSpawner.items.Remove(gameObject.transform.position);
+                    GameManager.Instance.UpdateGameStates(GameState.EmptyTilesFounding);
+
+
+                }
             }
 
             if ((bottom != null && up != null) && (bottom.name == up.name) &&
                 (bottom.name == gameObject.name || up.name == gameObject.name))
             {
-                itemsToPool.ReturnItem(bottom);
-                itemsToPool.ReturnItem(up);
-                itemsToPool.ReturnItem(gameObject);
-            }
-        }
 
-        GameManager.Instance.UpdateGameStates(GameState.EmptyTilesFounding);
-        
+                verticalMatch = true;
+                if (verticalMatch == true)
+                {
+                    verticalMatch = false;
+                    
+                    //itemsToPool.ReturnItem(bottom);
+                    //itemsToPool.ReturnItem(up);
+                    itemsToPool.ReturnItem(gameObject);
+                    //mainSpawner.items.Remove(bottom.transform.position);
+                    //mainSpawner.items.Remove(up.transform.position);
+                    mainSpawner.items.Remove(gameObject.transform.position);
+                    //GameManager.Instance.UpdateGameStates(GameState.EmptyTilesFounding);
+
+                }
+            }
+
+            
+
+            
+        }
     }
         
 }

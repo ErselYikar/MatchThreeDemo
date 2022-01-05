@@ -1,0 +1,54 @@
+{
+    "name": "Swipe",
+    "maps": [
+        {
+            "name": "Touch",
+            "id": "bef02d54-f74f-4c9a-92fa-81ff170f5815",
+            "actions": [
+                {
+                    "name": "PrimaryContact",
+                    "type": "PassThrough",
+                    "id": "c710c565-7b6c-4ea6-85fe-fec4ebe348db",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PrimaryPos",
+                    "type": "PassThrough",
+                    "id": "c93ade0e-6265-4aea-a15c-24dc92a3b9b2",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "cb6d267a-0d86-49e5-a38f-f7b18dce37a7",
+                    "path": "<Touchscreen>/primaryTouch/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PrimaryContact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7402a29c-da80-434a-a398-1f75b9bb1050",
+                    "path": "<Touchscreen>/primaryTouch/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PrimaryPos",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

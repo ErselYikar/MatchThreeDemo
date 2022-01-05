@@ -32,7 +32,7 @@ public class TileGatherer : MonoBehaviour
             }
             if(tiles.Length == tileDic.Count)
             {
-                GameManager.Instance.UpdateGameStates(GameState.TileGatheringDone);
+                GameManager.Instance.UpdateGameStates(GameState.AttendChildsToTiles);
             }
             
         }  

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class MainSpawner : MonoBehaviour
 {
@@ -10,9 +11,11 @@ public class MainSpawner : MonoBehaviour
     private Spawner[] childSpawnersArray;
     [SerializeField] private GameObject itemParent;
 
-    private Dictionary<Vector2, GameObject> items = new Dictionary<Vector2, GameObject>();
+    public Dictionary<Vector2, GameObject> items = new Dictionary<Vector2, GameObject>();
     private GameObject[] itemsArray;
     private List<GameObject> itemsList = new List<GameObject>();
+
+    [SerializeField] private List<GameObject> emptyTiles = new List<GameObject>();
 
     private void Start()
     {
@@ -26,6 +29,7 @@ public class MainSpawner : MonoBehaviour
         GameManager.OnGameStatesChanged += FindTilesOfEachChildSpawner;
         GameManager.OnGameStatesChanged += FindEmptyTilesOnEachColumn;
         GameManager.OnGameStatesChanged += SpawnNewItemsForEmptyTiles;
+        //GameManager.OnGameStatesChanged += CheckMatchingDone;
     }
 
     private void OnDisable()
@@ -33,6 +37,7 @@ public class MainSpawner : MonoBehaviour
         GameManager.OnGameStatesChanged -= FindTilesOfEachChildSpawner;
         GameManager.OnGameStatesChanged -= FindEmptyTilesOnEachColumn;
         GameManager.OnGameStatesChanged -= SpawnNewItemsForEmptyTiles;
+        //GameManager.OnGameStatesChanged -= CheckMatchingDone;
     }
 
     private void FindChildSpawners()
@@ -82,18 +87,29 @@ public class MainSpawner : MonoBehaviour
     {
         if(state == GameState.EmptyTilesFounding)
         {
-            foreach (GameObject childSpawner in childSpawners)
+            /*foreach(var tile in tileGatherer.tileDic)
             {
-                foreach (GameObject tilesOfChildSpawners in childSpawner.GetComponent<Spawner>().ownTiles)
+                if (!tile.Value.transform.GetChild(1).gameObject.activeInHierarchy)
                 {
-                    if (!items.ContainsKey(tilesOfChildSpawners.transform.position))
+                    emptyTiles.Add(tile.Value);
+                    
+                }
+                
+            }*/
+            
+            for (int i = 0; i < 8 * 2; i += 2)
+            {
+                for (int j = 0; j < 8 * 2; j += 2)
+                {
+                    if (!tileGatherer.tileDic[new Vector2(i-7,j-7)].transform.GetChild(1).gameObject.activeInHierarchy)
                     {
-                        childSpawner.GetComponent<Spawner>().emptyTiles.Add(tilesOfChildSpawners);
+                        emptyTiles.Add(tileGatherer.tileDic[new Vector2(i - 7, j - 7)]);
                     }
                 }
             }
 
-            //GameManager.Instance.UpdateGameStates(GameState.Spawning);
+            
+            
         }
     }
 
